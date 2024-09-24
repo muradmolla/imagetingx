@@ -24,7 +24,7 @@ func New(input string) (*Image, error) {
 		msg := fmt.Sprintf("error while decoding jpeg. error: %s", err)
 		return nil, errors.New(msg)
 	}
-	return &Image{input: file, img: &img}, err
+	return &Image{input: file, img: &img}, nil
 }
 
 func (img *Image) Save(output string) error {
