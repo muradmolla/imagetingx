@@ -27,8 +27,8 @@ func New(input string) (*Image, error) {
 	return &Image{input: file, img: &img}, err
 }
 
-func (img *Image) save(output string) error {
-	img.input.Close()
+func (img *Image) Save(output string) error {
+	defer img.input.Close()
 	fs, err := os.Create(output)
 	if err != nil {
 		msg := fmt.Sprintf("error while creating output. error: %s", err)
