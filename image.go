@@ -1,41 +1,43 @@
 package imagetingx
 
 import (
-	"errors"
 	"fmt"
 	"image"
+	"image/draw"
 	"image/jpeg"
 	"os"
 )
 
 type Image struct {
 	input *os.File
-	img   *image.Image
+	img   *image.NRGBA
 }
 
 func New(input string) (*Image, error) {
 	file, err := os.Open(input)
 	if err != nil {
-		msg := fmt.Sprintf("error while opening file. error: %s", err)
-		return nil, errors.New(msg)
+		return nil, fmt.Errorf("error while opening file. error: %s", err)
 	}
-	img, err := jpeg.Decode(file)
+	src, err := jpeg.Decode(file)
 	if err != nil {
-		msg := fmt.Sprintf("error while decoding jpeg. error: %s", err)
-		return nil, errors.New(msg)
+		return nil, fmt.Errorf("error while decoding jpeg. error: %s", err)
 	}
-	return &Image{input: file, img: &img}, nil
+
+	img := image.NewNRGBA(src.Bounds())
+	draw.Draw(img, img.Bounds(), src, img.Bounds().Min, draw.Src)
+
+	return &Image{input: file, img: img}, nil
 }
 
 func (img *Image) Save(output string) error {
 	defer img.input.Close()
 	fs, err := os.Create(output)
 	if err != nil {
-		msg := fmt.Sprintf("error while creating output. error: %s", err)
-		return errors.New(msg)
+		return fmt.Errorf("error while creating output. error: %s", err)
 	}
 
-	jpeg.Encode(fs, *img.img, nil)
+	var result image.Image = img.img
+	jpeg.Encode(fs, result, nil)
 
 	return nil
 }
