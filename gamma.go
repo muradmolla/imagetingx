@@ -5,6 +5,14 @@ import (
 )
 
 func (i *ImgX) Gamma(gamma float64) {
+	if i.img.Bounds().Dx()*i.img.Bounds().Dy() < 256*256 {
+		i.BruteGamma(gamma)
+	} else {
+		i.MapGamma(gamma)
+	}
+}
+
+func (i *ImgX) MapGamma(gamma float64) {
 	// apply color map
 	colorMap := newColorMap()
 	fixedScaler := func(v uint8) uint8 {
@@ -14,7 +22,7 @@ func (i *ImgX) Gamma(gamma float64) {
 	colorMap.G = scaleMapByIndex(colorMap.G, fixedScaler)
 	colorMap.B = scaleMapByIndex(colorMap.B, fixedScaler)
 	colorMap.A = scaleMapByIndex(colorMap.A, fixedScaler)
-	i.ApplyColormMap(colorMap)
+	i.ApplyColorMap(colorMap)
 }
 
 func (i *ImgX) BruteGamma(gamma float64) {
