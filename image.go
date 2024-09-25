@@ -12,6 +12,10 @@ type ImgX struct {
 	img *image.NRGBA
 }
 
+func (img *ImgX) Image() image.Image {
+	return img.img
+}
+
 func New(input interface{}) (*ImgX, error) {
 	var img *image.NRGBA
 	var err error
