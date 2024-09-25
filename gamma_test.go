@@ -12,10 +12,16 @@ import (
 func TestGamma(t *testing.T) {
 	// Testing both gamma functions match
 	img := createImage(increasingColor)
-	img.Gamma(2.0)
+	img.MapGamma(2.0)
 	imgT := createImage(increasingColor)
 	imgT.BruteGamma(2.0)
 	r := compareImages(img, imgT)
+	if !r {
+		t.Errorf("Images does not match when gamma")
+	}
+	imgT = createImage(increasingColor)
+	imgT.Gamma(2.0)
+	r = compareImages(img, imgT)
 	if !r {
 		t.Errorf("Images does not match when gamma")
 	}
