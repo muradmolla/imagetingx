@@ -12,7 +12,7 @@ type ColorMap struct {
 	A [256]uint8
 }
 
-func (i *ImgX) ApplyColormMap(cmp ColorMap) {
+func (i *ImgX) ApplyColorMap(cmp ColorMap) {
 	if i.img == nil {
 		return
 	}
