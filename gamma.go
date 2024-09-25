@@ -17,7 +17,7 @@ func (i *ImgX) Gamma(gamma float64) {
 	i.ApplyColormMap(colorMap)
 }
 
-func (i *ImgX) bruteGamma(gamma float64) {
+func (i *ImgX) BruteGamma(gamma float64) {
 	// basic
 
 	bounds := (*i.img).Bounds()
