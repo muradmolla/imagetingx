@@ -4,7 +4,20 @@ import (
 	"image/color"
 )
 
-func (i *Image) Gamma(gamma float64) {
+func (i *ImgX) Gamma(gamma float64) {
+	// apply color map
+	colorMap := newColorMap()
+	fixedScaler := func(v uint8) uint8 {
+		return scale(v, gamma)
+	}
+	colorMap.R = scaleMapByIndex(colorMap.R, fixedScaler)
+	colorMap.G = scaleMapByIndex(colorMap.G, fixedScaler)
+	colorMap.B = scaleMapByIndex(colorMap.B, fixedScaler)
+	colorMap.A = scaleMapByIndex(colorMap.A, fixedScaler)
+	i.ApplyColormMap(colorMap)
+}
+
+func (i *ImgX) bruteGamma(gamma float64) {
 	// basic
 
 	bounds := (*i.img).Bounds()
